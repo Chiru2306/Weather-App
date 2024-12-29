@@ -12,7 +12,7 @@ import snowyImage from './images/snowy.jpg';
 import defaultImage from './images/default.png';
 import "./App.css";
 
-const API_KEY = process.env.REACT_APP_API_KEY;
+const API_KEY = "06bdd04b3a98c170795cc6551e72521e";
 
 const App = () => {
   const [weatherData, setWeatherData] = useState(null);
