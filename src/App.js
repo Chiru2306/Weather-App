@@ -22,9 +22,10 @@ const App = () => {
   const [unit, setUnit] = useState("metric");
   const [background, setBackground] = useState("");
   const [typewriterText, setTypewriterText] = useState("");
+  const [loading, setLoading] = useState(false); // State to manage loading
+  const [popupMessage, setPopupMessage] = useState(""); // State for the popup message
 
   const fullText = "  Get accurate & latest weather updates..";
-
   const speed = 100;
 
   useEffect(() => {
@@ -44,6 +45,8 @@ const App = () => {
   // Fetch weather data
   useEffect(() => {
     const fetchWeather = async () => {
+      setLoading(true); // Start loading
+      setPopupMessage(""); // Clear any previous popup messages
       try {
         const currentWeather = await axios.get(
           `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=${unit}&appid=${API_KEY}`
@@ -55,9 +58,15 @@ const App = () => {
         setForecastData(forecast.data);
         updateBackground(currentWeather.data.weather[0].main);
       } catch (error) {
-        console.error("Error fetching weather data:", error);
+        if (error.response && error.response.data && error.response.data.message === "city not found") {
+          setPopupMessage("City not found");
+        } else {
+          console.error("Error fetching weather data:", error);
+        }
+      } finally {
+        setLoading(false); // Stop loading
       }
-    }; 
+    };
 
     fetchWeather();
   }, [city, unit]);
@@ -93,12 +102,26 @@ const App = () => {
         backgroundImage: `url(${background})`,
       }}
     >
+      {/* Loading Overlay */}
+      {loading && (
+        <div className="loading-overlay">
+          <div className="loading-spinner"></div>
+          <p>Loading...</p>
+        </div>
+      )}
+
+      {/* Popup for error messages */}
+      {popupMessage && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <p>{popupMessage}</p>
+            <button onClick={() => setPopupMessage("")}>OK</button>
+          </div>
+        </div>
+      )}
+
       <div className="NavBar">
-          <img
-            src={logo}
-            alt="logo"
-            height="100px"
-          />
+        <img src={logo} alt="logo" height="100px" />
       </div>
       <div className="DisText">
         <h2>{typewriterText}</h2>
@@ -111,11 +134,10 @@ const App = () => {
           setUnit={setUnit}
         />
       )}
-        {forecastData && <DailyForecast forecast={forecastData} />}
-      
-        {forecastData && <HourlyForecast forecast={forecastData} />}
+      {forecastData && <DailyForecast forecast={forecastData} />}
+      {forecastData && <HourlyForecast forecast={forecastData} />}
     </div>
   );
 };
 
-export default App; 
+export default App;
