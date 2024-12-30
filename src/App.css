@@ -67,6 +67,8 @@ body, html {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   width: 100%;
   max-width: 400px;
+  transform: translateX(-100%); /* Start off-screen */
+  animation: slide-in 1s ease-out forwards; /* Animation properties */
 }
 
 .weather-card img {
@@ -96,6 +98,12 @@ body, html {
   margin-top: 20px;
   width: 100%;
   /* max-width: 900px; */
+}
+
+.daily-forecast, .hourly-forecast {
+  opacity: 0;
+  transform: translateY(100%);
+  animation: slide-in-bottom 1s ease-out forwards;
 }
 
 .forecast-cards {
@@ -186,6 +194,36 @@ body, html {
   100% {
     transform: rotate(360deg);
   }
+}
+
+@keyframes slide-in {
+  0% {
+    transform: translateX(-100%); /* Start position */
+    opacity: 0; /* Start invisible */
+  }
+  100% {
+    transform: translateX(0); /* Final position */
+    opacity: 1; /* Fully visible */
+  }
+}
+
+@keyframes slide-in-bottom {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.daily-forecast {
+  animation-delay: 0.2s;
+}
+
+.hourly-forecast {
+  animation-delay: 0.4s;
 }
 
 /* Popup Overlay */
