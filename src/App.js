@@ -4,12 +4,12 @@ import WeatherCard from "./components/WeatherCard";
 import SearchBar from "./components/SearchBar";
 import DailyForecast from "./components/DailyForecast";
 import HourlyForecast from "./components/HourlyForecast";
-import clearImage from './images/clear.jpg';
+import clearImage from './images/clear.webp';
 import cloudyImage from './images/cloudy.webp';
-import hazeImage from './images/haze.jpg';
-import rainyImage from './images/rainy.jpg';
-import snowyImage from './images/snowy.jpg';
-import defaultImage from './images/default.png';
+import hazeImage from './images/haze.webp';
+import rainyImage from './images/rainy.webp';
+import snowyImage from './images/snowy.webp';
+import defaultImage from './images/default.webp';
 import logo from './images/Logo.png';
 import "./App.css";
 
