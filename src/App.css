@@ -19,7 +19,7 @@ body, html {
   background-position: center;
   background-repeat: no-repeat;
   color: #fff;
-  padding: 20px;
+  /* padding: 20px; */
 }
 
 /* Add scrolling behavior */
@@ -29,15 +29,19 @@ body, html {
 
 /* Search Bar */
 .search-bar {
+  margin-top: 20px;
   margin-bottom: 20px;
 }
 
 .search-bar input {
   padding: 10px;
+  background-color: rgb(247, 246, 246);
   font-size: 16px;
   border: none;
   border-radius: 4px;
   margin-right: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  width: 50vw;
 }
 
 .search-bar button {
@@ -48,6 +52,7 @@ body, html {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .search-bar button:hover {
@@ -115,10 +120,45 @@ body, html {
   height: 50px;
 }
 
+.NavBar{
+  width:100%;
+  display: flex;
+  align-items: start;
+  margin: 0;
+  background: linear-gradient(
+        rgba(0, 0, 0, 0.9), 
+        rgba(0, 0, 0, 0)  
+    );
+}
+
+.daily-forecast, .hourly-forecast h3{
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.DisText{
+  width: 96vw;
+  /* padding-left: 20px; */
+  display: flex;
+  align-items: flex-start;
+}
+
+.DisText h2{
+  color: rgb(255, 255, 255);
+  text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.8);
+  font-weight: 400;
+  font-size: xx-large;
+  font-family: Brush Script MT, cursive;
+}
 /* Media Queries */
 @media (max-width: 768px) {
   .weather-card, .daily-forecast, .hourly-forecast {
     width: 90%;
+  }
+  .weather-card{
+    max-width: 320px;
+  }
+  .search-bar input {
+    width: 60vw;
   }
 }
 

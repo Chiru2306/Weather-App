@@ -10,6 +10,7 @@ import hazeImage from './images/haze.jpg';
 import rainyImage from './images/rainy.jpg';
 import snowyImage from './images/snowy.jpg';
 import defaultImage from './images/default.png';
+import logo from './images/Logo.png';
 import "./App.css";
 
 const API_KEY = process.env.REACT_APP_API_KEY;
@@ -20,6 +21,25 @@ const App = () => {
   const [city, setCity] = useState("Hyderabad");
   const [unit, setUnit] = useState("metric");
   const [background, setBackground] = useState("");
+  const [typewriterText, setTypewriterText] = useState("");
+
+  const fullText = "  Get accurate & latest weather updates..";
+
+  const speed = 100;
+
+  useEffect(() => {
+    let i = 0;
+    const intervalId = setInterval(() => {
+      if (i < fullText.length) {
+        setTypewriterText((prev) => prev + fullText.charAt(i));
+        i++;
+      } else {
+        clearInterval(intervalId); // Clear the interval when done
+      }
+    }, speed);
+
+    return () => clearInterval(intervalId); // Cleanup on unmount
+  }, []);
 
   // Fetch weather data
   useEffect(() => {
@@ -73,6 +93,16 @@ const App = () => {
         backgroundImage: `url(${background})`,
       }}
     >
+      <div className="NavBar">
+          <img
+            src={logo}
+            alt="logo"
+            height="100px"
+          />
+      </div>
+      <div className="DisText">
+        <h2>{typewriterText}</h2>
+      </div>
       <SearchBar setCity={setCity} />
       {weatherData && (
         <WeatherCard
