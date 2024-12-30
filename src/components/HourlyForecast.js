@@ -1,7 +1,7 @@
 import React from "react";
 
 const HourlyForecast = ({ forecast }) => {
-  const hourlyData = forecast.list.slice(0, 5); // Next 8 data points (~3-hour intervals)
+  const hourlyData = forecast.list.slice(0, 5); 
 
   return (
     <div className="hourly-forecast">

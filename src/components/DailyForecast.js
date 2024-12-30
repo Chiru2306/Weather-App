@@ -1,7 +1,7 @@
 import React from "react";
 
 const DailyForecast = ({ forecast }) => {
-  const dailyData = forecast.list.filter((_, idx) => idx % 8 === 0); // Approx. every 24 hours
+  const dailyData = forecast.list.filter((_, idx) => idx % 8 === 0);
 
   return (
     <div className="daily-forecast">

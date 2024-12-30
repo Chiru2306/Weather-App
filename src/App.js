@@ -10,6 +10,7 @@ import hazeImage from './images/haze.webp';
 import rainyImage from './images/rainy.webp';
 import snowyImage from './images/snowy.webp';
 import defaultImage from './images/default.webp';
+import eyeicon from './images/eyeicon.png';
 import logo from './images/Logo.png';
 import "./App.css";
 
@@ -22,9 +23,36 @@ const App = () => {
   const [unit, setUnit] = useState("metric");
   const [background, setBackground] = useState("");
   const [typewriterText, setTypewriterText] = useState("");
-  const [loading, setLoading] = useState(false); // State to manage loading
-  const [popupMessage, setPopupMessage] = useState(""); // State for the popup message
+  const [loading, setLoading] = useState(false);
+  const [popupMessage, setPopupMessage] = useState(""); 
 
+  const [watchlist, setWatchlist] = useState(() => {
+    const saved = localStorage.getItem("watchlist");
+    return saved ? JSON.parse(saved) : []; 
+  });
+  
+  const addToWatchlist = (city) => {
+    if (!watchlist.includes(city)) {
+      const updatedWatchlist = [...watchlist, city];
+      setWatchlist(updatedWatchlist);
+      localStorage.setItem("watchlist", JSON.stringify(updatedWatchlist));
+      setPopupMessage(`Added ${city} to watchlist`);
+    } else {
+      setPopupMessage(`${city} is already in your watchlist`); 
+    }
+  };
+  
+  const removeFromWatchlist = (city) => {
+    const updatedWatchlist = watchlist.filter((c) => c !== city);
+    setWatchlist(updatedWatchlist);
+    localStorage.setItem("watchlist", JSON.stringify(updatedWatchlist));
+    setPopupMessage(`Removed ${city} from watchlist`); 
+  };  
+  
+  const handleCityClick = (city) => {
+    setCity(city); 
+  };
+  
   const fullText = "  Get accurate & latest weather updates..";
   const speed = 100;
 
@@ -35,18 +63,17 @@ const App = () => {
         setTypewriterText((prev) => prev + fullText.charAt(i));
         i++;
       } else {
-        clearInterval(intervalId); // Clear the interval when done
+        clearInterval(intervalId); 
       }
     }, speed);
 
-    return () => clearInterval(intervalId); // Cleanup on unmount
+    return () => clearInterval(intervalId); 
   }, []);
 
-  // Fetch weather data
   useEffect(() => {
     const fetchWeather = async () => {
-      setLoading(true); // Start loading
-      setPopupMessage(""); // Clear any previous popup messages
+      setLoading(true); 
+      setPopupMessage(""); 
       try {
         const currentWeather = await axios.get(
           `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=${unit}&appid=${API_KEY}`
@@ -64,14 +91,13 @@ const App = () => {
           console.error("Error fetching weather data:", error);
         }
       } finally {
-        setLoading(false); // Stop loading
+        setLoading(false); 
       }
     };
 
     fetchWeather();
   }, [city, unit]);
 
-  // Update background image based on weather condition
   const updateBackground = (condition) => {
     switch (condition.toLowerCase()) {
       case "clear":
@@ -102,7 +128,6 @@ const App = () => {
         backgroundImage: `url(${background})`,
       }}
     >
-      {/* Loading Overlay */}
       {loading && (
         <div className="loading-overlay">
           <div className="loading-spinner"></div>
@@ -110,7 +135,6 @@ const App = () => {
         </div>
       )}
 
-      {/* Popup for error messages */}
       {popupMessage && (
         <div className="popup-overlay">
           <div className="popup-content">
@@ -122,7 +146,25 @@ const App = () => {
 
       <div className="NavBar">
         <img src={logo} alt="logo" height="100px" />
+        <div className="watchlist-dropdown">
+          <button className="watchlist-button">Watchlist
+            <img height="10px" width="30px" src={eyeicon} alt=""/>
+          </button>
+          <div className="watchlist-menu">
+            {watchlist.length > 0 ? (
+              watchlist.map((city, index) => (
+                <div key={index} className="watchlist-item">
+                  <span onClick={() => handleCityClick(city)}>{city}</span>
+                  <button onClick={() => removeFromWatchlist(city)}>❌</button>
+                </div>
+              ))
+            ) : (
+              <p>Your watchlist is empty</p>
+            )}
+          </div>
+        </div>
       </div>
+
       <div className="DisText">
         <h2>{typewriterText}</h2>
       </div>
@@ -134,8 +176,17 @@ const App = () => {
           setUnit={setUnit}
         />
       )}
+      {weatherData && (
+        <button
+          className="add-to-watchlist-btn"
+          onClick={() => addToWatchlist(city)}
+        >
+         Add to Watchlist ✙
+        </button>
+      )}
       {forecastData && <DailyForecast forecast={forecastData} />}
       {forecastData && <HourlyForecast forecast={forecastData} />}
+      <p className="FooterText">Crafted with ❤️ in Hyderabad.</p>
     </div>
   );
 };
